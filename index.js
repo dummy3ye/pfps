@@ -1,10 +1,8 @@
-// State Management
 let allData = {};
 let currentCategory = 'all';
 let searchQuery = '';
 let selectedImage = null;
 
-// Initialize
 async function init() {
     setupTheme();
     setupSearch();
@@ -13,7 +11,6 @@ async function init() {
     applyFilters();
 }
 
-// Theme Management
 function setupTheme() {
     const themeToggle = document.getElementById('theme-toggle');
     const sunIcon = document.getElementById('sun-icon');
@@ -38,7 +35,6 @@ function setupTheme() {
         };
     }
     
-    // Initial load
     if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
     } else {
@@ -47,7 +43,6 @@ function setupTheme() {
     updateIcons();
 }
 
-// Search & Filtering
 function setupSearch() {
     const searchInput = document.getElementById('search-input');
     if (searchInput) {
@@ -87,7 +82,6 @@ function selectCategory(cat) {
     currentCategory = cat;
     document.getElementById('current-category').textContent = cat;
     
-    // Update active button state
     const buttons = document.querySelectorAll('#category-list button');
     buttons.forEach(btn => {
         if (btn.textContent.toLowerCase() === cat.toLowerCase()) {
@@ -134,7 +128,6 @@ function renderGrid(images) {
     images.forEach(img => {
         const card = document.createElement('div');
         card.className = 'aspect-square bg-gray-100 dark:bg-zinc-900 rounded-lg cursor-pointer overflow-hidden border-2 border-transparent hover:border-blue-500 transition-all';
-        // Lazy loading added here
         card.innerHTML = `<img src="${img.path}" class="w-full h-full object-cover" loading="lazy" decoding="async" alt="${img.name}">`;
         card.onclick = () => {
             document.querySelectorAll('#pfp-grid > div').forEach(c => c.classList.remove('border-blue-500', 'ring-2', 'ring-blue-500/20'));
@@ -182,13 +175,11 @@ function showDetails(img) {
     document.getElementById('download-btn').onclick = () => {
         if (!selectedImage) return;
         
-        // Construct GitHub Raw URL
         const repoOwner = 'dummy3ye';
         const repoName = 'pfps';
-        const branch = 'master';
+        const branch = 'main';
         const rawUrl = `https://raw.githubusercontent.com/${repoOwner}/${repoName}/${branch}/${selectedImage.path}`;
 
-        // Trigger download
         const link = document.createElement('a');
         link.href = rawUrl;
         link.download = selectedImage.name || 'download';
@@ -196,7 +187,6 @@ function showDetails(img) {
         link.click();
         document.body.removeChild(link);
 
-        // Feedback
         const btn = document.getElementById('download-btn');
         const originalText = btn.textContent;
         btn.textContent = 'Downloading...';
@@ -204,11 +194,9 @@ function showDetails(img) {
     };
 }
 
-// Upload Button Visibility
 if (['localhost', '127.0.0.1'].includes(window.location.hostname)) {
     const uploadBtn = document.getElementById('upload-btn');
     if (uploadBtn) uploadBtn.classList.remove('hidden');
 }
 
-// Start the app
 document.addEventListener('DOMContentLoaded', init);

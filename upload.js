@@ -1,4 +1,3 @@
-// Theme Management
 function setupTheme() {
     const themeToggle = document.getElementById('theme-toggle');
     const sunIcon = document.getElementById('sun-icon');
@@ -31,7 +30,6 @@ function setupTheme() {
     updateIcons();
 }
 
-// File Handling
 const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-input');
 const dropContent = document.getElementById('drop-content');
@@ -90,7 +88,6 @@ if (removeFile) {
     };
 }
 
-// Form Submission
 if (form) {
     form.onsubmit = async (e) => {
         e.preventDefault();
@@ -129,5 +126,4 @@ if (form) {
     };
 }
 
-// Start
 document.addEventListener('DOMContentLoaded', setupTheme);

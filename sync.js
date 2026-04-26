@@ -4,8 +4,6 @@ const sizeOf = require('image-size');
 
 const libraryDir = path.join(__dirname, 'library');
 const outputFile = path.join(__dirname, 'data.json');
-
-
 const supportedExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg'];
 
 function formatBytes(bytes, decimals = 2) {
@@ -25,7 +23,7 @@ function getFileData(filePath, fileName, category, existingImageData = {}) {
 
   const relativePath = category ? `library/${category}/${fileName}` : `library/${fileName}`;
   
-  // Use existing tags and source from data.json if available
+  // keep existing meta if available
   const tags = existingImageData.tags || [];
   const source = existingImageData.source || '';
 
@@ -42,19 +40,18 @@ function getFileData(filePath, fileName, category, existingImageData = {}) {
 
 function scanLibrary() {
   const categories = {};
-  let existingData = {}; // To hold existing data.json content to preserve tags/source
+  let existingData = {};
 
   if (fs.existsSync(outputFile)) {
     try { 
       const currentData = JSON.parse(fs.readFileSync(outputFile, 'utf8'));
-      // Flatten existingData for easy lookup by path
       for (const cat in currentData) {
         currentData[cat].forEach(img => {
           existingData[img.path] = img;
         });
       }
     } catch (e) {
-      console.error("Error reading existing data.json:", e.message);
+      console.error("error reading data.json:", e.message);
     }
   }
 
@@ -84,7 +81,7 @@ function scanLibrary() {
   if (rootImages.length > 0) categories['General'] = rootImages;
 
   fs.writeFileSync(outputFile, JSON.stringify(categories, null, 2));
-  console.log(`Successfully generated data.json.`);
+  console.log(`synced: data.json`);
 }
 
 if (require.main === module) {
