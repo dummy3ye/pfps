@@ -1,0 +1,20 @@
+{
+  "name": "pfp",
+  "version": "1.0.0",
+  "description": "A minimalist PFP library for GitHub Pages",
+  "main": "sync.js",
+  "scripts": {
+    "sync": "node sync.js",
+    "list": "node list.js",
+    "tag": "node tag.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "image-size": "^1.2.1",
+    "multer": "^1.4.5-lts.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
