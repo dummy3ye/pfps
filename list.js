@@ -11,7 +11,7 @@ function listImages() {
 
     const data = JSON.parse(fs.readFileSync(dataFile, 'utf8'));
     
-    // Simple argument parsing for --catagory_name
+    // Simple argument parsing for --catagory
     const args = process.argv.slice(2);
     const catArg = args.find(arg => arg.startsWith('--catagory='));
     const targetCategory = catArg ? catArg.split('=')[1] : null;
