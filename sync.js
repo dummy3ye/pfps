@@ -4,7 +4,17 @@ const sizeOf = require('image-size');
 
 const libraryDir = path.join(__dirname, 'library');
 const outputFile = path.join(__dirname, 'data.json');
+const ignoreFile = path.join(__dirname, '.syncignore');
 const supportedExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg'];
+
+function getIgnoreList() {
+  if (!fs.existsSync(ignoreFile)) return [];
+  return fs.readFileSync(ignoreFile, 'utf8')
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(line => line && !line.startsWith('#'))
+    .map(line => line.toLowerCase());
+}
 
 function formatBytes(bytes, decimals = 2) {
   if (bytes === 0) return '0 Bytes';
@@ -23,7 +33,6 @@ function getFileData(filePath, fileName, category, existingImageData = {}) {
 
   const relativePath = category ? `library/${category}/${fileName}` : `library/${fileName}`;
   
-  // keep existing meta if available
   const tags = existingImageData.tags || [];
   const source = existingImageData.source || '';
 
@@ -41,6 +50,7 @@ function getFileData(filePath, fileName, category, existingImageData = {}) {
 function scanLibrary() {
   const categories = {};
   let existingData = {};
+  const ignoreList = getIgnoreList();
 
   if (fs.existsSync(outputFile)) {
     try { 
@@ -58,11 +68,17 @@ function scanLibrary() {
   if (!fs.existsSync(libraryDir)) fs.mkdirSync(libraryDir);
 
   const items = fs.readdirSync(libraryDir);
+  
   items.forEach(item => {
+    if (ignoreList.includes(item.toLowerCase())) return;
+
     const itemPath = path.join(libraryDir, item);
     if (fs.statSync(itemPath).isDirectory()) {
       const images = fs.readdirSync(itemPath)
-        .filter(file => supportedExtensions.includes(path.extname(file).toLowerCase()))
+        .filter(file => {
+          return !ignoreList.includes(file.toLowerCase()) && 
+                 supportedExtensions.includes(path.extname(file).toLowerCase());
+        })
         .map(file => {
           const relativePath = `library/${item}/${file}`;
           return getFileData(path.join(itemPath, file), file, item, existingData[relativePath]);
@@ -72,7 +88,11 @@ function scanLibrary() {
   });
 
   const rootImages = items
-    .filter(item => fs.statSync(path.join(libraryDir, item)).isFile() && supportedExtensions.includes(path.extname(item).toLowerCase()))
+    .filter(item => {
+       return !ignoreList.includes(item.toLowerCase()) && 
+              fs.statSync(path.join(libraryDir, item)).isFile() && 
+              supportedExtensions.includes(path.extname(item).toLowerCase());
+    })
     .map(file => {
       const relativePath = `library/${file}`;
       return getFileData(path.join(libraryDir, file), file, null, existingData[relativePath]);
