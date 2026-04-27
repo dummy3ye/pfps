@@ -1,11 +1,87 @@
 {
-  "general": [
+  "Horimiya": [
     {
-      "name": "lelouch lean",
-      "path": "library/general/lelouch lean.jpg",
-      "resolution": "1080x1080",
-      "size": "255.66 KB",
-      "dateAdded": "2026-04-25",
+      "name": "matching_icons_",
+      "path": "library/Horimiya/matching_icons_.jpeg",
+      "resolution": "736x736",
+      "size": "85.71 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [],
+      "source": ""
+    },
+    {
+      "name": "matching_icons__1",
+      "path": "library/Horimiya/matching_icons__1.jpeg",
+      "resolution": "736x736",
+      "size": "81.12 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [],
+      "source": ""
+    },
+    {
+      "name": "𝗆𝖺𝗍𝖼𝗁𝗂𝗇𝗀 ㅤㅤ𝗂𝖼𝗈𝗇𝗌  !! (2)",
+      "path": "library/Horimiya/𝗆𝖺𝗍𝖼𝗁𝗂𝗇𝗀 ㅤㅤ𝗂𝖼𝗈𝗇𝗌  !! (2).jpeg",
+      "resolution": "736x736",
+      "size": "96.53 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [],
+      "source": ""
+    },
+    {
+      "name": "𝗆𝖺𝗍𝖼𝗁𝗂𝗇𝗀 ㅤㅤ𝗂𝖼𝗈𝗇𝗌  !! (3)",
+      "path": "library/Horimiya/𝗆𝖺𝗍𝖼𝗁𝗂𝗇𝗀 ㅤㅤ𝗂𝖼𝗈𝗇𝗌  !! (3).jpeg",
+      "resolution": "736x736",
+      "size": "83.36 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [],
+      "source": ""
+    },
+    {
+      "name": "𝗆𝖺𝗍𝖼𝗁𝗂𝗇𝗀 ㅤㅤ𝗂𝖼𝗈𝗇𝗌  !! (4)",
+      "path": "library/Horimiya/𝗆𝖺𝗍𝖼𝗁𝗂𝗇𝗀 ㅤㅤ𝗂𝖼𝗈𝗇𝗌  !! (4).jpeg",
+      "resolution": "736x736",
+      "size": "76.7 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [],
+      "source": ""
+    },
+    {
+      "name": "𝗆𝖺𝗍𝖼𝗁𝗂𝗇𝗀 ㅤㅤ𝗂𝖼𝗈𝗇𝗌  !! (5)",
+      "path": "library/Horimiya/𝗆𝖺𝗍𝖼𝗁𝗂𝗇𝗀 ㅤㅤ𝗂𝖼𝗈𝗇𝗌  !! (5).jpeg",
+      "resolution": "736x736",
+      "size": "79.23 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [],
+      "source": ""
+    }
+  ],
+  "Izumi Miyamura": [
+    {
+      "name": "a01ad86e883f34e5c8b2d5e1f288ae6e",
+      "path": "library/Izumi Miyamura/a01ad86e883f34e5c8b2d5e1f288ae6e.jpg",
+      "resolution": "675x1200",
+      "size": "45.14 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [],
+      "source": ""
+    },
+    {
+      "name": "Miyamura couch",
+      "path": "library/Izumi Miyamura/Miyamura couch.jpg",
+      "resolution": "736x736",
+      "size": "55.95 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [],
+      "source": ""
+    }
+  ],
+  "Kazehaya": [
+    {
+      "name": "kaze sitting",
+      "path": "library/Kazehaya/kaze sitting.jpg",
+      "resolution": "1280x720",
+      "size": "111.02 KB",
+      "dateAdded": "2026-04-27",
       "tags": [],
       "source": ""
     }
@@ -22,6 +98,15 @@
         "Anime"
       ],
       "source": "Pinterest"
+    },
+    {
+      "name": "lelouch",
+      "path": "library/Lelouch/lelouch.jpg",
+      "resolution": "1080x1080",
+      "size": "255.66 KB",
+      "dateAdded": "2026-04-25",
+      "tags": [],
+      "source": ""
     }
   ],
   "Rin": [
@@ -40,6 +125,15 @@
       "resolution": "736x736",
       "size": "80.88 KB",
       "dateAdded": "2026-04-25",
+      "tags": [],
+      "source": ""
+    },
+    {
+      "name": "Rin christmas",
+      "path": "library/Rin/Rin christmas.jpg",
+      "resolution": "236x236",
+      "size": "13.07 KB",
+      "dateAdded": "2026-04-27",
       "tags": [],
       "source": ""
     },
@@ -67,6 +161,28 @@
       "resolution": "736x736",
       "size": "80.08 KB",
       "dateAdded": "2026-04-25",
+      "tags": [
+        "Rin",
+        "Rush",
+        "Blue Lock"
+      ],
+      "source": ""
+    },
+    {
+      "name": "Rin side",
+      "path": "library/Rin/Rin side.jpg",
+      "resolution": "736x736",
+      "size": "54.63 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [],
+      "source": ""
+    },
+    {
+      "name": "Rin sports",
+      "path": "library/Rin/Rin sports.jpeg",
+      "resolution": "1200x675",
+      "size": "26.47 KB",
+      "dateAdded": "2026-04-27",
       "tags": [],
       "source": ""
     },
@@ -95,11 +211,114 @@
       "size": "43.43 KB",
       "dateAdded": "2026-04-25",
       "tags": [
-        "anime",
-        "bluelock",
-        "manga"
+        "Blue Lock",
+        "Rin Itoshi"
+      ],
+      "source": "Pinterest"
+    },
+    {
+      "name": "Rin_Itoshi",
+      "path": "library/Rin/Rin_Itoshi.png",
+      "resolution": "1780x2048",
+      "size": "132.64 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [],
+      "source": ""
+    }
+  ],
+  "Shinji": [
+    {
+      "name": "shinji sky",
+      "path": "library/Shinji/shinji sky.jpeg",
+      "resolution": "736x736",
+      "size": "130.91 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [
+        "NGE"
       ],
       "source": ""
+    }
+  ],
+  "Unsorted": [
+    {
+      "name": "AlZYWhn_",
+      "path": "library/Unsorted/AlZYWhn_.jpg",
+      "resolution": "736x735",
+      "size": "70.72 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [],
+      "source": ""
+    },
+    {
+      "name": "Kou",
+      "path": "library/Unsorted/Kou.webp",
+      "resolution": "250x352",
+      "size": "19.85 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [
+        "Kou mabuchi",
+        "Her Favs"
+      ],
+      "source": ""
+    }
+  ],
+  "Obamitsu": [
+    {
+      "name": "Obamitsu One",
+      "path": "library/Obamitsu/Obamitsu One.jpeg",
+      "resolution": "736x736",
+      "size": "65.92 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [
+        "Obamitsu",
+        "KNY",
+        "Obanai",
+        "Iguro"
+      ],
+      "source": "Pinterest"
+    },
+    {
+      "name": "Obamitsu Two",
+      "path": "library/Obamitsu/Obamitsu Two.jpeg",
+      "resolution": "736x736",
+      "size": "70.76 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [
+        "Obamitsu",
+        "KNY",
+        "Mitsuri"
+      ],
+      "source": "Pinterest"
+    }
+  ],
+  "Shinobu": [
+    {
+      "name": "Shinobu",
+      "path": "library/Shinobu/Shinobu.webp",
+      "resolution": "256x256",
+      "size": "13.46 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [
+        "Shinobu kocho",
+        "Katana",
+        "Moon"
+      ],
+      "source": "X"
+    }
+  ],
+  "Hotarubi": [
+    {
+      "name": "Gin",
+      "path": "library/Hotarubi/Gin.jpg",
+      "resolution": "347x347",
+      "size": "29.82 KB",
+      "dateAdded": "2026-04-27",
+      "tags": [
+        "Gin",
+        "Hotaru",
+        "Hotarubi no more e"
+      ],
+      "source": "Anime"
     }
   ]
 }
