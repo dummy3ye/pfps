@@ -56,7 +56,13 @@
                 </div>
                 <div class="space-y-2">
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Category</label>
-                    <input type="text" id="category" placeholder="e.g. Anime, Original" class="w-full bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all outline-none">
+                    <div class="space-y-2">
+                        <select id="category-select" class="w-full bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all outline-none appearance-none cursor-pointer">
+                            <option value="">Select Folder</option>
+                            <option value="new">+ Create New Folder</option>
+                        </select>
+                        <input type="text" id="category-new" placeholder="New folder name" class="hidden w-full bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all outline-none">
+                    </div>
                 </div>
                 <div class="space-y-2">
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Source URL</label>

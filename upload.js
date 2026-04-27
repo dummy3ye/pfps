@@ -38,8 +38,45 @@ const imagePreview = document.getElementById('image-preview');
 const removeFile = document.getElementById('remove-file');
 const form = document.getElementById('upload-form');
 const status = document.getElementById('status');
+const categorySelect = document.getElementById('category-select');
+const categoryNew = document.getElementById('category-new');
 
 let selectedFile = null;
+
+async function loadCategories() {
+    console.log('Fetching categories...');
+    try {
+        const response = await fetch('/api/categories');
+        const categories = await response.json();
+        console.log('Categories received:', categories);
+        
+        if (!categorySelect) {
+            console.error('category-select element not found!');
+            return;
+        }
+
+        categories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat;
+            categorySelect.appendChild(option);
+        });
+    } catch (err) {
+        console.error('Failed to load categories:', err);
+    }
+}
+
+if (categorySelect) {
+    categorySelect.onchange = () => {
+        if (categorySelect.value === 'new') {
+            categoryNew.classList.remove('hidden');
+            categoryNew.required = true;
+        } else {
+            categoryNew.classList.add('hidden');
+            categoryNew.required = false;
+        }
+    };
+}
 
 if (dropZone) {
     dropZone.onclick = () => !selectedFile && fileInput.click();
@@ -93,12 +130,24 @@ if (form) {
         e.preventDefault();
         if (!selectedFile) return alert('Please select a file first.');
 
+        let category = categorySelect.value;
+        if (category === 'new') {
+            category = categoryNew.value.trim();
+            if (!category) return alert('Please enter a new folder name.');
+        }
+        if (!category) return alert('Please select or create a folder.');
+
+        const imageName = document.getElementById('name').value.trim();
+        const source = document.getElementById('source').value.trim();
+        const tags = document.getElementById('tags').value.trim();
+
+        // CRITICAL: Append fields BEFORE the file so Multer can see them during diskStorage
         const formData = new FormData();
+        formData.append('name', imageName);
+        formData.append('category', category);
+        formData.append('source', source);
+        formData.append('tags', tags);
         formData.append('image', selectedFile);
-        formData.append('name', document.getElementById('name').value);
-        formData.append('category', document.getElementById('category').value);
-        formData.append('source', document.getElementById('source').value);
-        formData.append('tags', document.getElementById('tags').value);
 
         status.textContent = 'Uploading...';
         status.className = 'mt-4 text-sm text-center text-gray-500';
@@ -120,10 +169,14 @@ if (form) {
                 status.className = 'mt-4 text-sm text-center text-red-500';
             }
         } catch (err) {
-            status.textContent = 'Upload failed. Is the server running?';
+            console.error('Upload error:', err);
+            status.textContent = 'Upload failed. Check console for details.';
             status.className = 'mt-4 text-sm text-center text-red-500';
         }
     };
 }
 
-document.addEventListener('DOMContentLoaded', setupTheme);
+document.addEventListener('DOMContentLoaded', () => {
+    setupTheme();
+    loadCategories();
+});

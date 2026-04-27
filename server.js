@@ -27,6 +27,34 @@ const upload = multer({ storage: storage });
 app.use(express.static(__dirname));
 app.use(express.json());
 
+app.get('/api/categories', (req, res) => {
+  const categories = new Set();
+  
+  // 1. Get from data.json
+  const dataFilePath = path.join(__dirname, 'data.json');
+  if (fs.existsSync(dataFilePath)) {
+    try {
+      const currentData = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
+      Object.keys(currentData).forEach(cat => categories.add(cat));
+    } catch (e) {}
+  }
+
+  // 2. Get from physical library folder
+  const libraryDir = path.join(__dirname, 'library');
+  if (fs.existsSync(libraryDir)) {
+    try {
+      const items = fs.readdirSync(libraryDir);
+      items.forEach(item => {
+        if (fs.statSync(path.join(libraryDir, item)).isDirectory()) {
+          categories.add(item);
+        }
+      });
+    } catch (e) {}
+  }
+
+  res.json(Array.from(categories).sort());
+});
+
 app.get('/upload', (req, res) => {
   res.sendFile(path.join(__dirname, 'upload.html'));
 });
@@ -124,7 +152,8 @@ app.post('/api/metadata', (req, res) => {
   }
 });
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`\n--- Local Dev Server Running ---`);
-  console.log(`URL: http://localhost:${port}\n`);
+  console.log(`Local: http://localhost:${port}`);
+  console.log(`Network: http://192.168.x.x:${port} (check your local IP)\n`);
 });
