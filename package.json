@@ -7,7 +7,8 @@
     "sync": "node sync.js",
     "list": "node list.js",
     "tag": "node tag.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "duplicate": "node duplicate.js"
   },
   "dependencies": {
     "express": "^4.19.2",
