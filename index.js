@@ -172,25 +172,37 @@ function showDetails(img) {
         tagsContainer.innerHTML = '<span class="text-[10px] text-gray-400 italic">No tags</span>';
     }
 
-    document.getElementById('download-btn').onclick = () => {
+    document.getElementById('download-btn').onclick = async () => {
         if (!selectedImage) return;
         
-        const repoOwner = 'dummy3ye';
-        const repoName = 'pfps';
-        const branch = 'main';
-        const rawUrl = `https://raw.githubusercontent.com/${repoOwner}/${repoName}/${branch}/${selectedImage.path}`;
-
-        const link = document.createElement('a');
-        link.href = rawUrl;
-        link.download = selectedImage.name || 'download';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
         const btn = document.getElementById('download-btn');
         const originalText = btn.textContent;
         btn.textContent = 'Downloading...';
-        setTimeout(() => btn.textContent = originalText, 2000);
+        btn.disabled = true;
+
+        try {
+            const response = await fetch(selectedImage.path);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            const ext = selectedImage.path.split('.').pop();
+            link.download = `${selectedImage.name}.${ext}`;
+            
+            document.body.appendChild(link);
+            link.click();
+            
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error('Download failed:', err);
+            // Fallback for cross-origin issues or other errors
+            window.open(selectedImage.path, '_blank');
+        } finally {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
     };
 }
 
