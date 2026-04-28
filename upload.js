@@ -38,22 +38,18 @@ const imagePreview = document.getElementById('image-preview');
 const removeFile = document.getElementById('remove-file');
 const form = document.getElementById('upload-form');
 const status = document.getElementById('status');
+const statusContainer = document.getElementById('status-container');
 const categorySelect = document.getElementById('category-select');
 const categoryNew = document.getElementById('category-new');
 
 let selectedFile = null;
 
 async function loadCategories() {
-    console.log('Fetching categories...');
     try {
         const response = await fetch('/api/categories');
         const categories = await response.json();
-        console.log('Categories received:', categories);
         
-        if (!categorySelect) {
-            console.error('category-select element not found!');
-            return;
-        }
+        if (!categorySelect) return;
 
         categories.forEach(cat => {
             const option = document.createElement('option');
@@ -71,6 +67,7 @@ if (categorySelect) {
         if (categorySelect.value === 'new') {
             categoryNew.classList.remove('hidden');
             categoryNew.required = true;
+            categoryNew.focus();
         } else {
             categoryNew.classList.add('hidden');
             categoryNew.required = false;
@@ -83,16 +80,16 @@ if (dropZone) {
     
     dropZone.ondragover = (e) => {
         e.preventDefault();
-        dropZone.classList.add('border-blue-500', 'dark:border-blue-400');
+        dropZone.classList.add('border-blue-500', 'bg-blue-500/5');
     };
 
     dropZone.ondragleave = () => {
-        dropZone.classList.remove('border-blue-500', 'dark:border-blue-400');
+        dropZone.classList.remove('border-blue-500', 'bg-blue-500/5');
     };
 
     dropZone.ondrop = (e) => {
         e.preventDefault();
-        dropZone.classList.remove('border-blue-500', 'dark:border-blue-400');
+        dropZone.classList.remove('border-blue-500', 'bg-blue-500/5');
         if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
     };
 }
@@ -104,7 +101,7 @@ if (fileInput) {
 }
 
 function handleFile(file) {
-    if (!file.type.startsWith('image/')) return alert('Please select an image file.');
+    if (!file.type.startsWith('image/')) return showStatus('Please select a valid image file.', 'error');
     selectedFile = file;
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -125,23 +122,35 @@ if (removeFile) {
     };
 }
 
+function showStatus(message, type = 'info') {
+    statusContainer.classList.remove('hidden');
+    status.textContent = message;
+    
+    if (type === 'error') {
+        status.className = 'p-4 rounded-lg text-sm font-bold text-center bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800';
+    } else if (type === 'success') {
+        status.className = 'p-4 rounded-lg text-sm font-bold text-center bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800';
+    } else {
+        status.className = 'p-4 rounded-lg text-sm font-bold text-center bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800';
+    }
+}
+
 if (form) {
     form.onsubmit = async (e) => {
         e.preventDefault();
-        if (!selectedFile) return alert('Please select a file first.');
+        if (!selectedFile) return showStatus('Please select a file first.', 'error');
 
         let category = categorySelect.value;
         if (category === 'new') {
             category = categoryNew.value.trim();
-            if (!category) return alert('Please enter a new folder name.');
+            if (!category) return showStatus('Please enter a new folder name.', 'error');
         }
-        if (!category) return alert('Please select or create a folder.');
+        if (!category) return showStatus('Please select or create a folder.', 'error');
 
         const imageName = document.getElementById('name').value.trim();
         const source = document.getElementById('source').value.trim();
         const tags = document.getElementById('tags').value.trim();
 
-        // CRITICAL: Append fields BEFORE the file so Multer can see them during diskStorage
         const formData = new FormData();
         formData.append('name', imageName);
         formData.append('category', category);
@@ -149,8 +158,10 @@ if (form) {
         formData.append('tags', tags);
         formData.append('image', selectedFile);
 
-        status.textContent = 'Uploading...';
-        status.className = 'mt-4 text-sm text-center text-gray-500';
+        showStatus('Uploading and syncing...', 'info');
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.opacity = '0.5';
 
         try {
             const response = await fetch('/api/upload', {
@@ -159,19 +170,20 @@ if (form) {
             });
             const result = await response.json();
             if (result.success) {
-                status.textContent = 'Successfully uploaded and synced!';
-                status.className = 'mt-4 text-sm text-center text-green-500';
+                showStatus('Success! Image added to library.', 'success');
                 form.reset();
                 selectedFile = null;
-                setTimeout(() => window.location.href = 'index.html', 1500);
+                setTimeout(() => window.location.href = '/', 1200);
             } else {
-                status.textContent = result.message || 'Upload failed.';
-                status.className = 'mt-4 text-sm text-center text-red-500';
+                showStatus(result.message || 'Upload failed.', 'error');
+                submitBtn.disabled = false;
+                submitBtn.opacity = '1';
             }
         } catch (err) {
             console.error('Upload error:', err);
-            status.textContent = 'Upload failed. Check console for details.';
-            status.className = 'mt-4 text-sm text-center text-red-500';
+            showStatus('Upload failed. Server error.', 'error');
+            submitBtn.disabled = false;
+            submitBtn.opacity = '1';
         }
     };
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>upload | pfps</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
@@ -15,70 +15,91 @@
     </script>
     <script src="upload.js" defer></script>
 </head>
-<body class="min-h-screen flex flex-col items-center p-8 transition-colors duration-200">
+<body class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-300 min-h-screen flex flex-col items-center">
     
-    <header class="w-full max-w-2xl flex justify-between items-center mb-12">
-        <a href="index.html" class="text-sm font-semibold hover:text-blue-500 flex items-center gap-2 transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+    <header class="w-full max-w-2xl px-6 py-8 flex justify-between items-center">
+        <a href="/" class="group flex items-center gap-2 text-sm font-bold text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
+            <div class="w-8 h-8 flex items-center justify-center rounded bg-zinc-100 dark:bg-zinc-900 group-hover:bg-zinc-200 dark:group-hover:bg-zinc-800 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            </div>
             Back to Library
         </a>
-        <div class="flex items-center gap-4">
-            <button id="theme-toggle" class="p-2 w-10 h-10 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-zinc-900 hover:bg-gray-200 dark:hover:bg-zinc-800 transition-colors" title="Toggle Theme">
-                <svg id="sun-icon" class="hidden w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.071 16.071l.707.707M7.757 7.757l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
-                <svg id="moon-icon" class="hidden w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-            </button>
-            <h1 class="text-xl font-bold tracking-tight">upload</h1>
-        </div>
+        <button id="theme-toggle" class="p-2.5 rounded-lg bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-all active:scale-95 shadow-sm" title="Toggle Theme">
+            <svg id="sun-icon" class="hidden w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.071 16.071l.707.707M7.757 7.757l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+            <svg id="moon-icon" class="hidden w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        </button>
     </header>
 
-    <main class="w-full max-w-2xl upload-card p-8 rounded-2xl shadow-xl">
+    <main class="w-full max-w-2xl px-6 pb-20">
+        <div class="mb-10">
+            <h1 class="text-3xl font-black tracking-tighter mb-2">Upload PFP</h1>
+            <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium">Add a new image to your library with metadata.</p>
+        </div>
+
         <form id="upload-form" class="space-y-8">
             <!-- Drag and Drop Area -->
-            <div id="drop-zone" class="border-2 border-dashed border-gray-300 dark:border-zinc-700 rounded-2xl p-12 text-center hover:border-blue-500 dark:hover:border-blue-400 transition-all cursor-pointer group bg-white dark:bg-zinc-950/50">
+            <div id="drop-zone" class="relative overflow-hidden border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-lg p-10 text-center hover:border-blue-500 dark:hover:border-blue-500/50 transition-all cursor-pointer group bg-zinc-50 dark:bg-zinc-900/30">
                 <input type="file" id="file-input" class="hidden" accept="image/*">
-                <div id="drop-content">
-                    <div class="w-16 h-16 mx-auto bg-gray-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-8 h-8 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                
+                <div id="drop-content" class="py-4">
+                    <div class="w-16 h-16 mx-auto bg-white dark:bg-zinc-900 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-800 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-8 h-8 text-zinc-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                     </div>
-                    <p class="text-sm font-semibold">Click to upload or drag and drop</p>
-                    <p class="text-xs text-gray-400 mt-2">PNG, JPG, JPEG, GIF, WEBP</p>
+                    <p class="text-sm font-bold tracking-tight">Drop your image here or <span class="text-blue-500">browse</span></p>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-zinc-400 mt-4">PNG, JPG, JPEG, GIF, WEBP</p>
                 </div>
-                <div id="preview-content" class="hidden">
-                    <img id="image-preview" class="max-h-64 mx-auto rounded-xl border-2 border-white dark:border-zinc-800 shadow-lg mb-6">
-                    <button type="button" id="remove-file" class="text-xs font-bold text-red-500 uppercase tracking-widest hover:underline">Remove and change</button>
+
+                <div id="preview-content" class="hidden animate-in fade-in zoom-in duration-300">
+                    <div class="relative inline-block group">
+                        <img id="image-preview" class="max-h-80 mx-auto rounded-lg border dark:border-zinc-800 shadow-2xl">
+                        <button type="button" id="remove-file" class="absolute -top-3 -right-3 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                    <p class="text-xs font-bold text-zinc-400 mt-6 uppercase tracking-widest">Image Preview</p>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Image Name</label>
-                    <input type="text" id="name" placeholder="Filename will be used if empty" class="w-full bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all outline-none">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 ml-1">Image Name</label>
+                    <input type="text" id="name" placeholder="Filename will be used" 
+                        class="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg px-4 py-3.5 text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-400 dark:placeholder:text-zinc-600">
                 </div>
+
                 <div class="space-y-2">
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Category</label>
-                    <div class="space-y-2">
-                        <select id="category-select" class="w-full bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all outline-none appearance-none cursor-pointer">
-                            <option value="">Select Folder</option>
-                            <option value="new">+ Create New Folder</option>
+                    <label class="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 ml-1">Category</label>
+                    <div class="space-y-3">
+                        <select id="category-select" class="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg px-4 py-3.5 text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all appearance-none cursor-pointer">
+                            <option value="">Select Category</option>
+                            <option value="new" class="font-bold">+ Create New</option>
                         </select>
-                        <input type="text" id="category-new" placeholder="New folder name" class="hidden w-full bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all outline-none">
+                        <input type="text" id="category-new" placeholder="Enter new folder name" 
+                            class="hidden w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg px-4 py-3.5 text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all">
                     </div>
                 </div>
+
                 <div class="space-y-2">
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Source URL</label>
-                    <input type="text" id="source" placeholder="e.g. Pinterest, X link" class="w-full bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all outline-none">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 ml-1">Source URL</label>
+                    <input type="text" id="source" placeholder="e.g. Pinterest, X" 
+                        class="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg px-4 py-3.5 text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-400 dark:placeholder:text-zinc-600">
                 </div>
+
                 <div class="space-y-2">
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tags</label>
-                    <input type="text" id="tags" placeholder="comma separated: blue, cool" class="w-full bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all outline-none">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 ml-1">Tags</label>
+                    <input type="text" id="tags" placeholder="blue, aesthetic, pfp" 
+                        class="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg px-4 py-3.5 text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-400 dark:placeholder:text-zinc-600">
                 </div>
             </div>
 
-            <button type="submit" id="submit-btn" class="w-full py-4 bg-gray-900 dark:bg-white text-white dark:text-zinc-950 rounded-2xl font-bold uppercase tracking-widest hover:opacity-90 active:scale-[0.98] transition-all shadow-xl">
-                Upload to Library
+            <button type="submit" id="submit-btn" class="w-full py-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 rounded-lg text-xs font-black uppercase tracking-widest hover:scale-[1.01] active:scale-[0.98] transition-all shadow-xl shadow-zinc-500/10 dark:shadow-none">
+                Add to Library
             </button>
         </form>
-        <p id="status" class="mt-6 text-sm text-center font-medium"></p>
+
+        <div id="status-container" class="mt-8 hidden animate-in slide-in-from-top-4 duration-300">
+            <div id="status" class="p-4 rounded-lg text-sm font-bold text-center"></div>
+        </div>
     </main>
 </body>
 </html>
