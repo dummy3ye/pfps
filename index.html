@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>pfps</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
@@ -15,86 +15,123 @@
     </script>
     <script src="index.js" defer></script>
 </head>
-<body class="transition-colors">
-    <aside class="sidebar category-sidebar flex flex-col">
-        <div class="flex-grow">
-            <h1 class="text-xl font-bold mb-8 dark:text-white">pfps</h1>
-            <nav id="category-list" class="space-y-1"></nav>
+<body class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-300 overflow-x-hidden">
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden transition-opacity duration-300 opacity-0"></div>
+
+    <!-- Category Sidebar -->
+    <aside id="category-sidebar" class="fixed top-0 left-0 h-screen w-72 bg-zinc-50 dark:bg-zinc-900/50 backdrop-blur-xl border-r border-zinc-200 dark:border-zinc-800 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0 overflow-y-auto">
+        <div class="p-6 flex flex-col h-full">
+            <div class="flex items-center justify-between mb-8">
+                <h1 class="text-2xl font-black tracking-tighter">pfps</h1>
+                <button id="close-sidebar" class="lg:hidden p-2 -mr-2 text-zinc-500">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            
+            <nav id="category-list" class="space-y-1.5 flex-grow"></nav>
+
+            <div class="pt-6 mt-auto border-t border-zinc-200 dark:border-zinc-800 flex justify-center">
+                <button id="theme-toggle" class="p-3 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-all group shadow-sm active:scale-95" title="Toggle Theme">
+                    <svg id="sun-icon" class="hidden w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.071 16.071l.707.707M7.757 7.757l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+                    <svg id="moon-icon" class="hidden w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                </button>
+            </div>
         </div>
-        <button id="theme-toggle" class="p-2 w-10 h-10 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-zinc-900 hover:bg-gray-200 dark:hover:bg-zinc-800 mt-auto" title="Toggle Theme">
-            <svg id="sun-icon" class="hidden w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.071 16.071l.707.707M7.757 7.757l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
-            <svg id="moon-icon" class="hidden w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-        </button>
     </aside>
 
-    <main class="main-content">
-        <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <h2 id="current-category" class="text-2xl font-semibold capitalize">All</h2>
-            <div class="relative w-full md:w-80">
-                <input type="text" id="search-input" placeholder="Search by name, path, or tags..." 
-                    class="w-full bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 outline-none">
-                <svg class="absolute right-3 top-3 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    <!-- Main Content -->
+    <main class="lg:ml-72 lg:mr-80 min-h-screen">
+        <!-- Sticky Header -->
+        <header class="sticky top-0 z-30 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800 px-4 py-4 lg:px-8">
+            <div class="flex items-center justify-between gap-4 max-w-7xl mx-auto">
+                <button id="menu-toggle" class="lg:hidden p-2 -ml-2 text-zinc-600 dark:text-zinc-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+                </button>
+
+                <h2 id="current-category" class="text-lg font-bold capitalize lg:text-xl">All</h2>
+
+                <div class="relative flex-grow max-w-md lg:ml-auto">
+                    <input type="text" id="search-input" placeholder="Search library..." 
+                        class="w-full bg-zinc-100 dark:bg-zinc-900 border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500/20 transition-all placeholder:text-zinc-500">
+                    <svg class="absolute right-3 top-2.5 w-4 h-4 text-zinc-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
             </div>
         </header>
         
-        <div id="pfp-grid" class="pfp-grid"></div>
+        <div class="p-4 lg:p-8 max-w-7xl mx-auto">
+            <div id="pfp-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 lg:gap-6"></div>
+        </div>
 
-        <a id="upload-btn" href="/upload" class="hidden fixed bottom-8 right-8 lg:right-[340px] w-14 h-14 bg-gray-900 dark:bg-white text-white dark:text-zinc-950 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 z-[100]">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        <!-- Floating Action Button (Mobile/Dev) -->
+        <a id="upload-btn" href="/upload" class="hidden fixed bottom-6 right-6 w-14 h-14 bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 rounded-xl flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all z-40">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
         </a>
     </main>
 
-    <aside id="details-sidebar" class="sidebar details-sidebar hidden lg:block">
-        <div id="details-content" class="hidden">
-            <h3 class="text-xs font-bold uppercase text-gray-400 mb-4 tracking-widest">Image Details</h3>
-            <div class="aspect-square bg-gray-50 dark:bg-zinc-900 rounded-xl border dark:border-zinc-800 overflow-hidden mb-6">
+    <!-- Details Sidebar / Modal -->
+    <div id="details-overlay" class="fixed inset-0 bg-black/60 z-[60] lg:hidden hidden backdrop-blur-sm"></div>
+    <aside id="details-sidebar" class="fixed top-0 right-0 h-screen w-full lg:w-80 bg-white dark:bg-zinc-950 border-l border-zinc-200 dark:border-zinc-800 z-[70] transition-transform duration-300 translate-x-full lg:translate-x-0 overflow-y-auto">
+        <div id="details-content" class="hidden p-6 lg:p-8">
+            <div class="flex items-center justify-between mb-6 lg:hidden">
+                <h3 class="font-bold">Image Details</h3>
+                <button id="close-details" class="p-2 -mr-2 text-zinc-500">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="aspect-square bg-zinc-100 dark:bg-zinc-900 rounded-lg overflow-hidden mb-8 shadow-inner">
                 <img id="detail-image" src="" class="w-full h-full object-cover">
             </div>
             
             <div class="space-y-6">
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Name</label>
-                    <p id="detail-name" class="text-sm font-semibold break-all"></p>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Name</label>
+                    <p id="detail-name" class="text-sm font-bold leading-tight break-all"></p>
                 </div>
 
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Path</label>
-                    <p id="detail-path" class="text-[11px] font-mono break-all text-gray-500"></p>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Path</label>
+                    <p id="detail-path" class="text-[11px] font-mono break-all text-zinc-500 opacity-80"></p>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Resolution</label>
-                        <p id="detail-resolution" class="text-xs font-mono text-gray-600 dark:text-zinc-400"></p>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Resolution</label>
+                        <p id="detail-resolution" class="text-xs font-bold font-mono"></p>
                     </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Size</label>
-                        <p id="detail-size" class="text-xs font-mono text-gray-600 dark:text-zinc-400"></p>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Size</label>
+                        <p id="detail-size" class="text-xs font-bold font-mono"></p>
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Date Added</label>
-                    <p id="detail-date" class="text-xs font-mono text-gray-600 dark:text-zinc-400"></p>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Date Added</label>
+                    <p id="detail-date" class="text-xs font-medium"></p>
                 </div>
 
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Tags</label>
-                    <div id="detail-tags" class="flex flex-wrap gap-2"></div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Tags</label>
+                    <div id="detail-tags" class="flex flex-wrap gap-1.5"></div>
                 </div>
 
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Source</label>
-                    <p id="detail-source" class="text-xs italic text-gray-500 break-all"></p>
+                <div id="source-container" class="space-y-1">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Source</label>
+                    <p id="detail-source" class="text-xs italic text-zinc-500 break-all"></p>
                 </div>
             </div>
 
-            <button id="download-btn" class="mt-10 w-full py-3 bg-gray-900 dark:bg-white text-white dark:text-zinc-950 rounded-xl text-xs font-bold uppercase tracking-widest hover:opacity-90 active:scale-[0.98] transition-all shadow-lg">
-                Download
+            <button id="download-btn" class="mt-10 w-full py-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 rounded-lg text-xs font-black uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-blue-500/10 dark:shadow-none">
+                Download PFP
             </button>
         </div>
-        <div id="details-empty" class="h-full flex items-center justify-center">
-            <p class="text-gray-400 text-sm italic opacity-60">Select an image to view details</p>
+        
+        <div id="details-empty" class="h-full flex flex-col items-center justify-center p-12 text-center">
+            <div class="w-16 h-16 rounded-xl bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center mb-4">
+                <svg class="w-8 h-8 text-zinc-300 dark:text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </div>
+            <p class="text-zinc-400 dark:text-zinc-600 text-sm font-medium">Select an image to see details and download</p>
         </div>
     </aside>
 </body>
