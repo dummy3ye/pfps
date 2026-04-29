@@ -3,176 +3,55 @@ let currentCategory = 'all';
 let searchQuery = '';
 let selectedImage = null;
 
+// Pagination state
+let filteredImages = [];
+let currentPage = 0;
+const itemsPerPage = 20;
+let isLoading = false;
+let observer = null;
+
 async function init() {
     setupTheme();
     setupSearch();
     setupMobileInteractions();
+    setupInfiniteScroll();
     await fetchData();
     renderCategories();
     applyFilters();
 }
 
-function setupTheme() {
-    const themeToggle = document.getElementById('theme-toggle');
-    const sunIcon = document.getElementById('sun-icon');
-    const moonIcon = document.getElementById('moon-icon');
+function setupInfiniteScroll() {
+    const sentinel = document.getElementById('scroll-sentinel');
+    const loader = document.getElementById('loader');
 
-    function updateIcons() {
-        if (document.documentElement.classList.contains('dark')) {
-            sunIcon.classList.remove('hidden');
-            moonIcon.classList.add('hidden');
-        } else {
-            sunIcon.classList.add('hidden');
-            moonIcon.classList.remove('hidden');
+    observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !isLoading && (currentPage + 1) * itemsPerPage < filteredImages.length) {
+            loadNextPage();
         }
-    }
+    }, { rootMargin: '200px' });
 
-    if (themeToggle) {
-        themeToggle.onclick = () => {
-            document.documentElement.classList.toggle('dark');
-            const isDark = document.documentElement.classList.contains('dark');
-            localStorage.theme = isDark ? 'dark' : 'light';
-            updateIcons();
-        };
-    }
-    
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.remove('dark');
-    }
-    updateIcons();
+    observer.observe(sentinel);
 }
 
-function setupSearch() {
-    const searchInput = document.getElementById('search-input');
-    if (searchInput) {
-        searchInput.oninput = (e) => {
-            searchQuery = e.target.value.toLowerCase();
-            applyFilters();
-        };
-    }
+function loadNextPage() {
+    isLoading = true;
+    const loader = document.getElementById('loader');
+    if (loader) loader.classList.remove('hidden');
+
+    currentPage++;
+    const start = currentPage * itemsPerPage;
+    const end = start + itemsPerPage;
+    const nextBatch = filteredImages.slice(start, end);
+
+    renderBatch(nextBatch);
+
+    isLoading = false;
+    if (loader) loader.classList.add('hidden');
 }
 
-function setupMobileInteractions() {
-    const menuToggle = document.getElementById('menu-toggle');
-    const closeSidebar = document.getElementById('close-sidebar');
-    const sidebarOverlay = document.getElementById('sidebar-overlay');
-    const closeDetails = document.getElementById('close-details');
-    const detailsOverlay = document.getElementById('details-overlay');
-
-    const toggleSidebar = () => {
-        document.body.classList.toggle('sidebar-open');
-        const isOpen = document.body.classList.contains('sidebar-open');
-        sidebarOverlay.classList.toggle('hidden', !isOpen);
-        setTimeout(() => sidebarOverlay.classList.toggle('opacity-100', isOpen), 10);
-    };
-
-    const closeAll = () => {
-        document.body.classList.remove('sidebar-open', 'details-open');
-        sidebarOverlay.classList.add('hidden');
-        detailsOverlay.classList.add('hidden');
-        sidebarOverlay.classList.remove('opacity-100');
-        detailsOverlay.classList.remove('opacity-100');
-    };
-
-    if (menuToggle) menuToggle.onclick = toggleSidebar;
-    if (closeSidebar) closeSidebar.onclick = closeAll;
-    if (sidebarOverlay) sidebarOverlay.onclick = closeAll;
-    if (closeDetails) closeDetails.onclick = closeAll;
-    if (detailsOverlay) detailsOverlay.onclick = closeAll;
-
-    // ESC key to close everything
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeAll();
-    });
-}
-
-async function fetchData() {
-    try {
-        const res = await fetch('data.json');
-        allData = await res.json();
-    } catch (e) {
-        console.error('Failed to load data.json', e);
-        const grid = document.getElementById('pfp-grid');
-        if (grid) grid.innerHTML = '<p class="text-red-500">Error loading library data.</p>';
-    }
-}
-
-function renderCategories() {
-    const list = document.getElementById('category-list');
-    if (!list) return;
-    list.innerHTML = '';
-    
-    const categories = ['all', ...Object.keys(allData)];
-    categories.forEach(cat => {
-        const btn = document.createElement('button');
-        btn.className = 'flex items-center w-full px-4 py-2.5 text-sm font-medium rounded-lg capitalize transition-all duration-200 group';
-        
-        const isActive = currentCategory.toLowerCase() === cat.toLowerCase();
-        if (isActive) {
-            btn.classList.add('bg-blue-500', 'text-white', 'shadow-lg', 'shadow-blue-500/20');
-        } else {
-            btn.classList.add('text-zinc-500', 'hover:bg-zinc-200/50', 'dark:hover:bg-zinc-800/50', 'hover:text-zinc-900', 'dark:hover:text-zinc-100');
-        }
-
-        btn.innerHTML = `
-            <span class="flex-grow text-left">${cat}</span>
-        `;
-
-
-        btn.onclick = () => {
-            selectCategory(cat);
-            if (window.innerWidth < 1024) {
-                document.body.classList.remove('sidebar-open');
-                document.getElementById('sidebar-overlay').classList.add('hidden');
-            }
-        };
-        list.appendChild(btn);
-    });
-}
-
-function selectCategory(cat) {
-    currentCategory = cat;
-    document.getElementById('current-category').textContent = cat;
-    renderCategories();
-    applyFilters();
-}
-
-function applyFilters() {
-    let filtered = [];
-    if (currentCategory === 'all') {
-        filtered = Object.values(allData).flat();
-    } else {
-        filtered = allData[currentCategory] || [];
-    }
-
-    if (searchQuery) {
-        filtered = filtered.filter(img => {
-            const nameMatch = img.name.toLowerCase().includes(searchQuery);
-            const pathMatch = img.path.toLowerCase().includes(searchQuery);
-            const tagMatch = img.tags.some(tag => tag.toLowerCase().includes(searchQuery));
-            return nameMatch || pathMatch || tagMatch;
-        });
-    }
-
-    renderGrid(filtered);
-}
-
-function renderGrid(images) {
+function renderBatch(images) {
     const grid = document.getElementById('pfp-grid');
     if (!grid) return;
-    grid.innerHTML = '';
-
-    if (images.length === 0) {
-        grid.innerHTML = `
-            <div class="col-span-full py-20 flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600">
-                <svg class="w-12 h-12 mb-4 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                <p class="text-sm font-medium">No images found matching your search</p>
-            </div>
-        `;
-        return;
-    }
 
     images.forEach(img => {
         const card = document.createElement('div');
@@ -185,6 +64,43 @@ function renderGrid(images) {
         };
         grid.appendChild(card);
     });
+}
+
+function applyFilters() {
+    if (currentCategory === 'all') {
+        filteredImages = Object.values(allData).flat();
+    } else {
+        filteredImages = allData[currentCategory] || [];
+    }
+
+    if (searchQuery) {
+        filteredImages = filteredImages.filter(img => {
+            const nameMatch = img.name.toLowerCase().includes(searchQuery);
+            const pathMatch = img.path.toLowerCase().includes(searchQuery);
+            const tagMatch = img.tags.some(tag => tag.toLowerCase().includes(searchQuery));
+            return nameMatch || pathMatch || tagMatch;
+        });
+    }
+
+    // Reset pagination
+    const grid = document.getElementById('pfp-grid');
+    if (grid) grid.innerHTML = '';
+    currentPage = 0;
+    
+    if (filteredImages.length === 0) {
+        if (grid) {
+            grid.innerHTML = `
+                <div class="col-span-full py-20 flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600">
+                    <svg class="w-12 h-12 mb-4 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <p class="text-sm font-medium">No images found matching your search</p>
+                </div>
+            `;
+        }
+        return;
+    }
+
+    const firstBatch = filteredImages.slice(0, itemsPerPage);
+    renderBatch(firstBatch);
 }
 
 function showDetails(img) {
